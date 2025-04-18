@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './index.css';
 
 // Simple SVG icons as components
@@ -101,6 +102,8 @@ const LeafIcon = () => (
 );
 
 export default function App() {
+  const navigate = useNavigate();
+  const [weatherData, setWeatherData] = useState(null)
   const [cropData, setCropData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -115,11 +118,7 @@ export default function App() {
     pesticideType: '',
     pesticideDate: '',
     irrigationMethod: '',
-    // Removing soilType as it's now part of the new section
-    // Removing weatherPatterns as temperature/humidity will be in new section
-    // Removing waterSources as rainfall will be in new section
-    
-    // New fields for crop suitability assessment
+    location: '',
     n: '',
     p: '',
     k: '',
@@ -160,7 +159,84 @@ export default function App() {
       
       const data = await response.json();
       setCropData(data);
-      console.log(cropData)
+      // console.log(data);
+      
+      // Weather data fetching
+      let weatherdata = {};
+      if (formData.location) {
+        try {
+          // Note: In a real app, you'd use axios or fetch with a real API key
+          // This is a placeholder implementation
+          const weatherResponse = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?q=${formData.location}&units=metric&appid=52f82cdc9b3b8f2e84f2c5b49bbbadbc`
+          );
+          
+          if (weatherResponse.ok) {
+            const weatherResponseData = await weatherResponse.json();
+            weatherdata = {
+              temperature: `${Math.round(weatherResponseData.main.temp)}°C`,
+              humidity: `${weatherResponseData.main.humidity}%`,
+              rainfall: weatherResponseData.rain ? 
+                `${weatherResponseData.rain['1h'] || 0}mm (Last hour)` : 
+                "0mm (Last hour)",
+              forecast: weatherResponseData.weather[0].description
+            };
+          }
+        } catch (weatherError) {
+          console.error("Weather API error:", weatherError);
+          // Continue with default weather data
+          weatherdata = {
+            temperature: formData.temperature + "°C",
+            humidity: formData.humidity + "%",
+            rainfall: formData.rainfall + "mm/year",
+            forecast: "Not available"
+          };
+        }
+        setWeatherData(weatherdata);
+      }
+      
+      // Calculate current growth stage based on planting date
+      let growthStage = formData.growthStage || "Planting";
+      if (formData.plantingDate) {
+        const plantDate = new Date(formData.plantingDate);
+        const currentDate = new Date();
+        const daysDifference = Math.floor((currentDate - plantDate) / (1000 * 60 * 60 * 24));
+        
+        if (daysDifference > 90) {
+          growthStage = "Ripening";
+        } else if (daysDifference > 60) {
+          growthStage = "Reproductive";
+        } else if (daysDifference > 30) {
+          growthStage = "Vegetative";
+        }
+      }
+
+    
+
+      console.log({
+        ...formData,
+         ...data,
+         growthStage,
+         ...weatherdata
+       });
+      
+      
+      
+      navigate('/dashboard', { 
+        state: { 
+          farmData: {
+            ...formData,
+            ...data,
+            growthStage,
+            ...weatherdata
+          }
+        }
+      });
+      
+      
+      
+      
+      
     } catch (error) {
       console.error('Error fetching recommendation:', error);
       setError('Failed to get crop recommendation. Please try again.');
@@ -245,6 +321,19 @@ export default function App() {
                       <option value="terraced">Terraced</option>
                       <option value="mixed">Mixed</option>
                     </select>
+                  </div>
+                  <div className="form-field">
+                    <label className="field-label">
+                      Location
+                    </label>
+                    <input 
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    className="pesticide-input"
+                    placeholder="Indore"
+                    required />
                   </div>
                 </div>
               </div>
@@ -530,11 +619,26 @@ export default function App() {
 
             {/* Submit Button */}
             <div className="submit-container">
-              <button type="submit" className="submit-button">
-                <span className="icon-wrapper"><SproutIcon /></span>
-                Submit Field Information
+              <button type="submit" className="submit-button" disabled={isLoading}>
+                {isLoading ? 'Processing...' : (
+                  <>
+                    <span className="icon-wrapper"><SproutIcon /></span>
+                    Submit Field Information
+                  </>
+                )}
               </button>
             </div>
+            
+            {/* Error message */}
+            {error && <div className="error-message">{error}</div>}
+            
+            
+            {/* {cropData && (
+              <div className="result-section">
+                <h2>Crop Recommendation</h2>
+                <pre>{JSON.stringify(cropData, null, 2)}</pre>
+              </div>
+            )} */}
           </form>
         </div>
 
