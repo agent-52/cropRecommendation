@@ -14,6 +14,8 @@ export default function Dashboard() {
   useEffect(() => {
     if (!farmData) {
       navigate('/');
+    } else {
+      window.scrollTo(0, 0); // Force scroll to top on load
     }
   }, [farmData, navigate]);
 
