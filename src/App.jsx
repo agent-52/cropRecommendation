@@ -101,6 +101,9 @@ const LeafIcon = () => (
 );
 
 export default function App() {
+  const [cropData, setCropData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     fieldSize: '',
     sizeUnit: 'acres',
@@ -117,9 +120,9 @@ export default function App() {
     // Removing waterSources as rainfall will be in new section
     
     // New fields for crop suitability assessment
-    nitrogen: '',
-    phosphorus: '',
-    potassium: '',
+    n: '',
+    p: '',
+    k: '',
     temperature: '',
     humidity: '',
     ph: '',
@@ -134,10 +137,36 @@ export default function App() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Form submitted successfully!');
-    console.log(formData);
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      // Replace with your deployed API URL
+      const apiUrl = 'https://croprecommendationmodel-fohf.onrender.com/recommend';
+      
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      setCropData(data);
+      console.log(cropData)
+    } catch (error) {
+      console.error('Error fetching recommendation:', error);
+      setError('Failed to get crop recommendation. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -381,8 +410,8 @@ export default function App() {
                         <label className="field-label">Nitrogen (N)</label>
                         <input
                           type="number"
-                          name="nitrogen"
-                          value={formData.nitrogen}
+                          name="n"
+                          value={formData.n}
                           onChange={handleChange}
                           className="full-width-input"
                           placeholder="e.g., 80"
@@ -394,8 +423,8 @@ export default function App() {
                         <label className="field-label">Phosphorus (P)</label>
                         <input
                           type="number"
-                          name="phosphorus"
-                          value={formData.phosphorus}
+                          name="p"
+                          value={formData.p}
                           onChange={handleChange}
                           className="full-width-input"
                           placeholder="e.g., 45"
@@ -407,8 +436,8 @@ export default function App() {
                         <label className="field-label">Potassium (K)</label>
                         <input
                           type="number"
-                          name="potassium"
-                          value={formData.potassium}
+                          name="k"
+                          value={formData.k}
                           onChange={handleChange}
                           className="full-width-input"
                           placeholder="e.g., 30"
