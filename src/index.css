@@ -276,3 +276,98 @@
       justify-content: center;
     }
   }
+
+  /* Footer */
+.footer {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Icons */
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* New styles for suitability assessment section */
+.nutrient-group, .chemistry-group, .environment-group {
+  padding: 15px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border: 1px solid #d0e0f0;
+}
+
+.nutrient-group {
+  background-color: rgba(240, 255, 240, 0.7);
+  border-color: #c8e6c9;
+}
+
+.chemistry-group {
+  background-color: rgba(255, 248, 225, 0.7);
+  border-color: #ffe0b2;
+}
+
+.environment-group {
+  background-color: rgba(232, 245, 255, 0.7);
+  border-color: #bbdefb;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  .input-group {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .crop-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  
+  .nutrient-inputs {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .environment-inputs {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  
+  .soil-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .header-icon {
+    display: block;
+  }
+}
+
+@media (min-width: 992px) {
+  .soil-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .form-body {
+    padding: 16px;
+  }
+  
+  .form-section {
+    padding: 15px;
+  }
+  
+  .submit-container {
+    text-align: center;
+  }
+  
+  .submit-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .pesticide-inputs {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}

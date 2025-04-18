@@ -73,6 +73,33 @@ const MountainIcon = () => (
   </svg>
 );
 
+const TestTubeIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon">
+    <path d="M14.5 2v17.5c0 1.4-1.1 2.5-2.5 2.5h0c-1.4 0-2.5-1.1-2.5-2.5V2" />
+    <path d="M8.5 2h7" />
+    <path d="M14.5 16h-5" />
+  </svg>
+);
+
+const FlaskIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon">
+    <path d="M9 3h6" />
+    <path d="M10 9h4" />
+    <path d="M10 3v6" />
+    <path d="M14 3v6" />
+    <path d="M6 20a5 5 0 0 1 .2-9" />
+    <path d="M17.8 11a5 5 0 0 1 .2 9" />
+    <path d="M12 14v0" />
+  </svg>
+);
+
+const LeafIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon">
+    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+  </svg>
+);
+
 export default function App() {
   const [formData, setFormData] = useState({
     fieldSize: '',
@@ -84,10 +111,19 @@ export default function App() {
     pestProblems: '',
     pesticideType: '',
     pesticideDate: '',
-    soilType: '',
     irrigationMethod: '',
-    weatherPatterns: '',
-    waterSources: ''
+    // Removing soilType as it's now part of the new section
+    // Removing weatherPatterns as temperature/humidity will be in new section
+    // Removing waterSources as rainfall will be in new section
+    
+    // New fields for crop suitability assessment
+    nitrogen: '',
+    phosphorus: '',
+    potassium: '',
+    temperature: '',
+    humidity: '',
+    ph: '',
+    rainfall: ''
   });
 
   const handleChange = (e) => {
@@ -290,97 +326,174 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Soil and Irrigation */}
+              {/* Irrigation Method (moved from Soil & Water Management) */}
               <div className="form-section">
-                <h2 className="section-title">Soil & Water Management</h2>
+                <h2 className="section-title">Irrigation</h2>
                 <p className="section-description">
-                  Soil type and irrigation method are foundational factors in your field's productivity. 
-                  These details allow us to provide recommendations for soil health and water efficiency.
+                  Your irrigation method is a key factor in water management and crop health.
+                  This information helps determine optimal water usage for your field.
                 </p>
                 
-                <div className="input-group">
-                  {/* Soil Type */}
-                  <div className="form-field">
-                    <label className="field-label">Basic Soil Type</label>
-                    <select
-                      name="soilType"
-                      value={formData.soilType}
-                      onChange={handleChange}
-                      className="full-width-input"
-                      required
-                    >
-                      <option value="">Select soil type</option>
-                      <option value="clay">Clay</option>
-                      <option value="loam">Loam</option>
-                      <option value="sandy">Sandy</option>
-                      <option value="silt">Silt</option>
-                      <option value="peaty">Peaty</option>
-                      <option value="chalky">Chalky</option>
-                      <option value="mixed">Mixed</option>
-                    </select>
-                  </div>
-
-                  {/* Irrigation Method */}
-                  <div className="form-field">
-                    <label className="field-label">
-                      <span className="icon-wrapper"><DropletsIcon /></span>
-                      Irrigation Method
-                    </label>
-                    <select
-                      name="irrigationMethod"
-                      value={formData.irrigationMethod}
-                      onChange={handleChange}
-                      className="full-width-input"
-                      required
-                    >
-                      <option value="">Select method</option>
-                      <option value="drip">Drip irrigation</option>
-                      <option value="sprinkler">Sprinkler system</option>
-                      <option value="flood">Flood irrigation</option>
-                      <option value="furrow">Furrow irrigation</option>
-                      <option value="rainfall">Rainfall only</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
+                <div className="form-field">
+                  <label className="field-label">
+                    <span className="icon-wrapper"><DropletsIcon /></span>
+                    Irrigation Method
+                  </label>
+                  <select
+                    name="irrigationMethod"
+                    value={formData.irrigationMethod}
+                    onChange={handleChange}
+                    className="full-width-input"
+                    required
+                  >
+                    <option value="">Select method</option>
+                    <option value="drip">Drip irrigation</option>
+                    <option value="sprinkler">Sprinkler system</option>
+                    <option value="flood">Flood irrigation</option>
+                    <option value="furrow">Furrow irrigation</option>
+                    <option value="rainfall">Rainfall only</option>
+                    <option value="other">Other</option>
+                  </select>
                 </div>
               </div>
 
-              {/* Weather & Water Sources */}
-              <div className="form-section water-section">
+              {/* NEW SECTION: Crop Suitability Assessment */}
+              <div className="form-section soil-analysis-section">
                 <h2 className="section-title">
-                  <span className="icon-wrapper"><CloudRainIcon /></span>
-                  Weather & Water Sources
+                  <span className="icon-wrapper"><LeafIcon /></span>
+                  Crop Suitability Assessment
                 </h2>
                 <p className="section-description">
-                  Local climate conditions and water availability significantly impact your agricultural practices. 
-                  Detailed information about weather patterns and nearby water sources helps in planning for climate resilience.
+                  Complete the following measurements to determine the most suitable crops for your land.
+                  This analysis considers soil nutrients, pH levels, and environmental conditions.
                 </p>
                 
-                <div className="water-grid">
-                  <div className="form-field">
-                    <label className="field-label">
-                      <span className="icon-wrapper"><ThermometerIcon /></span>
-                      Local Weather Patterns
-                    </label>
-                    <textarea
-                      name="weatherPatterns"
-                      value={formData.weatherPatterns}
-                      onChange={handleChange}
-                      rows="3"
-                      className="full-width-input"
-                      placeholder="Describe typical weather conditions"
-                    ></textarea>
+                <div className="soil-grid">
+                  {/* Soil Nutrients (NPK) */}
+                  <div className="nutrient-group">
+                    <h3 className="subsection-title">
+                      <span className="icon-wrapper"><TestTubeIcon /></span>
+                      Soil Nutrients (mg/kg)
+                    </h3>
+                    
+                    <div className="nutrient-inputs">
+                      <div className="form-field">
+                        <label className="field-label">Nitrogen (N)</label>
+                        <input
+                          type="number"
+                          name="nitrogen"
+                          value={formData.nitrogen}
+                          onChange={handleChange}
+                          className="full-width-input"
+                          placeholder="e.g., 80"
+                          required
+                        />
+                      </div>
+                      
+                      <div className="form-field">
+                        <label className="field-label">Phosphorus (P)</label>
+                        <input
+                          type="number"
+                          name="phosphorus"
+                          value={formData.phosphorus}
+                          onChange={handleChange}
+                          className="full-width-input"
+                          placeholder="e.g., 45"
+                          required
+                        />
+                      </div>
+                      
+                      <div className="form-field">
+                        <label className="field-label">Potassium (K)</label>
+                        <input
+                          type="number"
+                          name="potassium"
+                          value={formData.potassium}
+                          onChange={handleChange}
+                          className="full-width-input"
+                          placeholder="e.g., 30"
+                          required
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className="form-field">
-                    <label className="field-label">Nearby Water Sources</label>
-                    <textarea
-                      name="waterSources"
-                      value={formData.waterSources}
-                      onChange={handleChange}
-                      rows="3"
-                      className="full-width-input"
-                      placeholder="List any rivers, lakes, wells, etc."
-                    ></textarea>
+                  
+                  {/* Soil Chemistry */}
+                  <div className="chemistry-group">
+                    <h3 className="subsection-title">
+                      <span className="icon-wrapper"><FlaskIcon /></span>
+                      Soil Chemistry
+                    </h3>
+                    
+                    <div className="form-field">
+                      <label className="field-label">pH Value</label>
+                      <input
+                        type="number"
+                        name="ph"
+                        value={formData.ph}
+                        onChange={handleChange}
+                        className="full-width-input"
+                        placeholder="e.g., 6.5"
+                        min="0"
+                        max="14"
+                        step="0.1"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Environmental Conditions */}
+                  <div className="environment-group">
+                    <h3 className="subsection-title">
+                      <span className="icon-wrapper"><ThermometerIcon /></span>
+                      Environmental Conditions
+                    </h3>
+                    
+                    <div className="environment-inputs">
+                      <div className="form-field">
+                        <label className="field-label">Temperature (°C)</label>
+                        <input
+                          type="number"
+                          name="temperature"
+                          value={formData.temperature}
+                          onChange={handleChange}
+                          className="full-width-input"
+                          placeholder="Average temperature"
+                          required
+                        />
+                      </div>
+                      
+                      <div className="form-field">
+                        <label className="field-label">Humidity (%)</label>
+                        <input
+                          type="number"
+                          name="humidity"
+                          value={formData.humidity}
+                          onChange={handleChange}
+                          className="full-width-input"
+                          placeholder="Average humidity"
+                          min="0"
+                          max="100"
+                          required
+                        />
+                      </div>
+                      
+                      <div className="form-field">
+                        <label className="field-label">
+                          <span className="icon-wrapper"><CloudRainIcon /></span>
+                          Rainfall (mm/year)
+                        </label>
+                        <input
+                          type="number"
+                          name="rainfall"
+                          value={formData.rainfall}
+                          onChange={handleChange}
+                          className="full-width-input"
+                          placeholder="Average annual rainfall"
+                          required
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
