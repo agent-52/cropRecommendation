@@ -142,7 +142,7 @@ export default function App() {
     setError(null);
     
     try {
-      // Replace with your deployed API URL
+      
       const apiUrl = 'https://croprecommendationmodel-fohf.onrender.com/recommend';
       
       const response = await fetch(apiUrl, {
@@ -161,12 +161,11 @@ export default function App() {
       setCropData(data);
       // console.log(data);
       
-      // Weather data fetching
+      
       let weatherdata = {};
       if (formData.location) {
         try {
-          // Note: In a real app, you'd use axios or fetch with a real API key
-          // This is a placeholder implementation
+          
           const weatherResponse = await fetch(
             `https://api.openweathermap.org/data/2.5/weather?q=${formData.location}&units=metric&appid=52f82cdc9b3b8f2e84f2c5b49bbbadbc`
           );
@@ -195,7 +194,7 @@ export default function App() {
         setWeatherData(weatherdata);
       }
       
-      // Calculate current growth stage based on planting date
+      
       let growthStage = formData.growthStage || "Planting";
       if (formData.plantingDate) {
         const plantDate = new Date(formData.plantingDate);
@@ -444,7 +443,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Irrigation Method (moved from Soil & Water Management) */}
+              {/* Irrigation Method  */}
               <div className="form-section">
                 <h2 className="section-title">Irrigation</h2>
                 <p className="section-description">
@@ -475,7 +474,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* NEW SECTION: Crop Suitability Assessment */}
+              {/*  Crop Suitability Assessment */}
               <div className="form-section soil-analysis-section">
                 <h2 className="section-title">
                   <span className="icon-wrapper"><LeafIcon /></span>

@@ -15,7 +15,7 @@ export default function Dashboard() {
     if (!farmData) {
       navigate('/');
     } else {
-      window.scrollTo(0, 0); // Force scroll to top on load
+      window.scrollTo(0, 0); 
     }
   }, [farmData, navigate]);
 
@@ -139,7 +139,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* NPK Chart */}
+      
       {(farmData.n || farmData.p || farmData.k) && (
         <div className="data-card chart-card" style={{ marginTop: "2rem" }}>
           <h3 className="chart-title">Soil Nutrients (NPK)</h3>
@@ -159,7 +159,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* pH Display */}
+      
       {farmData.ph && (
         <div className="data-card chart-card" style={{ marginTop: "2rem" }}>
           <h3 className="chart-title">Soil pH</h3>
